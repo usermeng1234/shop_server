@@ -36,6 +36,6 @@ app.use(async (ctx) => {
     // ctx.body = 'hello weichuang';
 })
 
-app.listen(3001, () => {
+app.listen(3000, () => {
     console.log('start shop server');
 });

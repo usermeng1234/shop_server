@@ -20,4 +20,38 @@ router.post('/registUser', async (ctx) => {
         };
     });
 });
+
+
+router.post('/loginUser', async (ctx) => {
+    let loginUser=ctx.request.body;
+    let userName=loginUser.userName;
+    let password=loginUser.password;
+    // 获取model
+    const User = mongoose.model('User');
+    // 查询用户名
+    await User.findOne({userName:userName}).exec().then(async (result)=>{
+        if(result){
+            let newUser=new User();
+            await newUser.comparePassword(password,result.password).then(isMatch=>{
+                if(isMatch){
+                    ctx.body={
+                        code:200,
+                        message:'登陆成功'
+                    }
+                }else{
+                    ctx.body={
+                        code:201,
+                        message:'登陆失败'
+                    }
+                }
+            })
+        }else{
+            ctx.body={
+                code:201,
+                message:'用户名不存在'
+            }
+        }
+    })
+   
+});
 module.exports=router;
